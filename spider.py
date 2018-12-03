@@ -22,10 +22,15 @@ class Spider(object):
                 translation = json_obj['data']['explain']['translation']
             except:
                 pass
+            # obj = {
+            #     'fanyi':{'翻译':fanyi},
+            #     'phonetic':{'发音':phonetic},
+            #     'translation':{'其他':translation},
+            # }
             obj = {
-                'fanyi':{'翻译':fanyi},
-                'phonetic':{'发音':phonetic},
-                'translation':{'其他':translation},
+                'fanyi':  fanyi,
+                'phonetic': str(phonetic).replace('{','').replace('}',''),
+                'translation':str(translation).replace('{','').replace('}',''),
             }
             return obj
         else:

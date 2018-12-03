@@ -14,20 +14,24 @@ class MainPage(object):
         self.createPage()
 
     def createPage(self):
-        self.index = Frame(self.root)
-        Button(self.index, text='查询',command=self.inputData).pack(side=TOP, anchor=W, fill=X, expand=YES)
-        Button(self.index, text='历史记录',command=self.queryData).pack(side=TOP, anchor=W, fill=X, expand=YES)
-        Button(self.index, text='我的收藏',command=self.countData).pack(side=TOP, anchor=W, fill=X, expand=YES)
-        Button(self.index, text='注销',command=self.logout).pack(side=TOP, anchor=W, fill=X, expand=YES)
-        Button(self.index, text='退出',command=self.index.quit).pack(side=TOP, anchor=W, fill=X, expand=YES)
-        self.index.pack(side=LEFT, fill=BOTH, expand=YES)
-
         self.inputPage = InputFrame(self.root)  # 创建不同Frame
         self.queryPage = QueryFrame(self.root)
         self.countPage = CountFrame(self.root)
         self.aboutPage = AboutFrame(self.root)
+        self.inputPage.pack()  # 默认显示查询界面
 
-        self.inputPage.pack(side=LEFT, padx=10)  # 默认显示查询界面
+        menubar = Menu(self.root)
+        self.root.config(menu=menubar)
+        fileMenu = Menu(menubar)
+
+        menubar.add_cascade(label="菜单", menu=fileMenu)
+
+        fileMenu.add_command(label='查询单词', command=self.inputData)
+        fileMenu.add_command(label='查询历史记录', command=self.queryData)
+        fileMenu.add_command(label='我的收藏', command=self.countData)
+        fileMenu.add_command(label='注销', command=self.logout)
+        fileMenu.add_command(label='退出', command=self.inputPage.quit)
+        # fileMenu.add_command(label='关于', command=self.aboutDisp)
 
 
     def inputData(self):
@@ -62,6 +66,5 @@ class MainPage(object):
         self.queryPage.destroy()
         self.countPage.destroy()
         self.aboutPage.destroy()
-        self.index.destroy()
         login = LoginPage.LoginPage(self.root)
 

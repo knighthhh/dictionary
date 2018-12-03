@@ -20,21 +20,14 @@ class InputFrame(Frame):  # 继承Frame类
         self.spider = spider.Spider()
 
     def createPage(self,query_res={'fanyi':'','phonetic':'','translation':''}):
-
-        # self.fm2 = Frame(self.root)
-        # Button(self, text='Left').pack(side=LEFT)
-        # Button(self, text='This is the Center button').pack(side=LEFT)
-        # Button(self, text='Right').pack(side=LEFT)
-        # self.fm2.pack(side=LEFT, padx=10)
-
         Label(self).grid(row=0, stick=W, pady=10)
         Label(self, text='请输入: ').grid(row=1, stick=W, pady=10)
         Entry(self, textvariable=self.word,width=40).grid(row=2, stick=W)
 
         Label(self, text='结果如下: ').grid(row=4,stick=W, pady=10)
-        Label(self, text='翻译：'+query_res['fanyi'],height=2,width=40,justify = 'left').grid(row=5, stick=W, pady=10)
-        Label(self, text='发音：'+query_res['phonetic'],height=2,width=40,justify = 'left').grid(row=6, stick=W, pady=10)
-        Label(self, text='其他：'+query_res['translation'],height=2,width=40,justify = 'left').grid(row=7, stick=W, pady=10)
+        Label(self, text=query_res['fanyi'],height=2,width=40,justify = 'left').grid(row=5, stick=W, pady=10)
+        Label(self, text=query_res['phonetic'],height=2,width=40,justify = 'left').grid(row=6, stick=W, pady=10)
+        Label(self, text=query_res['translation'],height=2,width=40,justify = 'left').grid(row=7, stick=W, pady=10)
         # Entry(self, textvariable=self.mean).grid(row=3, column=1, stick=E)
         # Text(self, height=5, width=50).grid(row=4, column=1, stick=W)
 
@@ -73,11 +66,11 @@ class InputFrame(Frame):  # 继承Frame类
 
         # 添加到我的收藏
         name = config.USERNAME
-        mean = str(query_res['fanyi'])
+        mean = json.dumps(query_res)
         mytime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         timestamp = int(time.time())
-        sql = "insert into collection(word,mean,name,time,timestamp) values('%s','%s','%s','%s','%s')" % (word, mean, name, mytime, timestamp)
-        print(sql)
+        sql = "insert into collection(word,mean,name,time,timestamp) values('%s','%s','%s','%s','%s')" % (
+        word, mean, name, mytime, timestamp)
         save_res = self.mysqlClient.save(sql)
         if save_res:
             showinfo(title='成功', message='收藏成功')
@@ -94,8 +87,8 @@ class QueryFrame(Frame):  # 继承Frame类
 
     def createPage(self):
         Label(self).grid(row=0, stick=W, pady=10)
-        Label(self, text='单词名称',width=20).grid(row=1, column=1, stick=W, pady=10)
-        Label(self, text='查询时间',width=20).grid(row=1, column=2, stick=W, pady=10)
+        Label(self, text='单词名称').grid(row=1, column=1, stick=W, pady=10)
+        Label(self, text='查询时间').grid(row=1, column=2, stick=W, pady=10)
         results = self.get_history()
 
         row_num = 2
@@ -108,8 +101,8 @@ class QueryFrame(Frame):  # 继承Frame类
         for res in results:
             word = res[1]
             time = res[2]
-            Label(self, text=word,width=20).grid(row=row_num, column=1, stick=W, pady=10)
-            Label(self, text=time,width=20).grid(row=row_num, column=2, stick=W, pady=10)
+            Label(self, text=word).grid(row=row_num, column=1, stick=W, pady=10)
+            Label(self, text=time).grid(row=row_num, column=2, stick=W, pady=10)
             row_num +=1
 
     def get_history(self):
@@ -131,9 +124,9 @@ class CountFrame(Frame):  # 继承Frame类
 
     def createPage(self):
         Label(self).grid(row=0, stick=W, pady=10)
-        Label(self, text='单词名称',width=20).grid(row=1, column=1, stick=W, pady=10)
-        Label(self, text='收藏时间',width=20).grid(row=1, column=2, stick=W, pady=10)
-        Label(self, text='释义',width=20).grid(row=1, column=3, stick=W, pady=10)
+        Label(self, text='单词名称').grid(row=1, column=1, stick=W, pady=10)
+        Label(self, text='收藏时间').grid(row=1, column=2, stick=W, pady=10)
+        Label(self, text='释义').grid(row=1, column=3, stick=W, pady=10)
         results = self.get_collection()
 
         row_num = 2
@@ -141,9 +134,9 @@ class CountFrame(Frame):  # 继承Frame类
             word = res[2]
             mean = res[3]
             time = res[4]
-            Label(self, text=word,width=20).grid(row=row_num, column=1, stick=W, pady=10)
-            Label(self, text=time,width=20).grid(row=row_num, column=2, stick=W, pady=10)
-            Label(self, text=mean,width=20).grid(row=row_num, column=3, stick=W, pady=10)
+            Label(self, text=word).grid(row=row_num, column=1, stick=W, pady=10)
+            Label(self, text=time).grid(row=row_num, column=2, stick=W, pady=10)
+            Label(self, text=mean).grid(row=row_num, column=3, stick=W, pady=10)
             row_num += 1
 
     def get_collection(self):
